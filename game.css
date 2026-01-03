@@ -1,0 +1,389 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100svh;
+  background: radial-gradient(
+    circle at center,
+    #ffb347,
+    #ff9800,
+    #f28c00
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #000;
+  font-family: Arial, sans-serif;
+overflow-x: hidden;
+}
+
+.app {
+  width: 100%;
+  max-width: 1200px; /* desktop jadi lebih gede */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* TITLE */
+.title {
+  margin-top: 30px;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-align: center;
+  width: 100%;
+}
+
+.subtitle {
+  margin-top: 6px;
+  font-size: 14px;
+}
+/* ================= RESULT PANEL ================= */
+
+.result-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: none; /* awalnya disembunyiin */
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.result-panel {
+  width: 260px;
+  background: #b88a6a;
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 0 10px 0 #7a4f36;
+}
+
+.result-panel h2 {
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+}
+
+.result-score {
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.result-score span {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.result-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.result-buttons button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: #ffd966;
+}
+
+/* GAME AREA */
+.game-wrapper {
+  position: relative;
+  margin-top: 40px;
+  width: 100%;
+  max-width: 420px;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.ghost-piece {
+  position: absolute;
+  top: 10px; /* sejajar dropLineY */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background-image: url("assets/jw1.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* IDLE IMAGE (ANIMASI) */
+.idle-item {
+  position: absolute;
+  top: -90px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+}
+
+
+.idle-item img {
+  width: 100%;
+  animation:
+    float 3s ease-in-out infinite,
+    pulse 2.5s ease-in-out infinite;
+}
+.idle-bg {
+  position: fixed;
+  inset: 0;
+  background-image: url("assets/bg cat.png");
+  background-repeat: repeat;
+  background-size: 60px;
+  opacity: 0.18;
+  animation: catMove 80s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+.idle-item::before,
+.idle-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("assets/idle/jungwon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+}
+
+/* DUPLIKAT 1 */
+.idle-item::before {
+  transform: translate(-90px, 20px) scale(0.85);
+  animation: driftLeft 4s ease-in-out infinite;
+}
+
+/* DUPLIKAT 2 */
+.idle-item::after {
+  transform: translate(90px, -10px) scale(0.75);
+  animation: driftRight 4.5s ease-in-out infinite;
+}
+
+
+/* GAME BOX */
+.game-box {
+  position: relative;
+  width: 420px;      /* ukuran nyaman desktop */    /* tinggi fix biar gak aneh */
+  aspect-ratio: 340 / 520;
+  max-width: 92vw;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden; /* ⬅️ INI KUNCI UTAMA */
+}
+
+
+.box-border {
+  position: absolute;
+  inset: 0;
+  border-left: 3px solid #fff;
+  border-right: 3px solid #fff;
+  border-bottom: 3px solid #fff;
+  pointer-events: none;
+  z-index: 50;
+}
+
+
+/* BOTTOM */
+.bottom {
+  width: 260px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.score span {
+  font-size: 12px;
+}
+
+.score-box {
+  width: 90px;
+  height: 34px;
+  margin-top: 4px;
+  border: 2px solid #fff;
+  background: rgba(255,255,255,0.3);
+}
+
+.credit {
+  font-size: 12px;
+}
+
+.game-layout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 28px; /* JARAK ANTARA KOTAK & NEXT */
+}
+
+
+.drop-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-top: 2px dashed rgba(255,255,255,0.9);
+  pointer-events: none;
+  z-index: 20;
+  top: 90px;
+  border-top: 2px dashed rgba(255,255,255,.7);
+  animation: pulseLine 1.2s infinite;
+}
+
+
+.next-box {
+  text-align: center;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+  gap: 4px;
+  margin-top: 56px;
+  pointer-events: none;
+}
+
+
+.next-img {
+  width: 56px;
+  height: 56px;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  outline: 2px solid #fff;
+}
+
+.next-img.bump {
+  transform: scale(1.15);
+  opacity: .8;
+}
+
+#game {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  inset: 0;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.ghost-piece {
+  z-index: 30;
+}
+
+
+
+/* ✨ ANIMATIONS ✨ */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes driftLeft {
+  0% {
+    transform: translate(-90px, 20px) scale(0.85);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-120px, -10px) scale(0.9);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-90px, 20px) scale(0.85);
+    opacity: 0.2;
+  }
+}
+
+@keyframes driftRight {
+  0% {
+    transform: translate(90px, -10px) scale(0.75);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(120px, 15px) scale(0.8);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(90px, -10px) scale(0.75);
+    opacity: 0.3;
+  }
+}
+
+@keyframes catMove {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -2000px 0;
+  }
+}
+@keyframes pulseLine {
+  0%,100% { opacity: .4; }
+  50% { opacity: 1; }
+}
+
+/* ================= MOBILE SCALE ================= */
+@media (max-width: 480px) {
+  .game-box {
+    width: 68vw;
+    height: 52vh;
+    max-height: 520px;  /* biar gak kebablasan */
+    aspect-ratio: auto;
+  }
+  .app {
+    width: 100%;
+    max-width: 380px;
+    padding-top: 42px;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-top: 16px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .bottom {
+    margin-top: 10px;
+    margin-bottom: 12px;
+  }
+
+    .game-wrapper {
+    margin-top: 20px;
+  }
+}
+
+
+
+@media (min-width: 1024px) {
+  .game-box {
+    max-width: 420px; /* desktop lebih gede */
+  }
+
+  .bottom {
+    max-width: 520px;
+  }
+}

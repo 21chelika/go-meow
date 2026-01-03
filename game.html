@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>GO MEOW!</title>
+  <link rel="stylesheet" href="game.css">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js" defer></script>
+<script src="game.js" defer></script>
+<body>
+  <div class="idle-bg"></div>
+
+  <div class="app">
+
+    <h1 class="title">GO MEOW!</h1>
+    <p class="subtitle">Web Game For Jungwon Birthday</p>
+
+    <div class="game-wrapper">
+      <div class="game-layout">
+
+        <div class="game-box">
+          <canvas id="game"></canvas>
+          <div class="box-border"></div>
+          <div class="drop-line"></div>
+        </div>
+
+        <div class="next-box">
+          <span>NEXT</span>
+          <div class="next-img"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="score">
+        <span>SCORE</span>
+        <div class="score-box" id="score">0</div>
+      </div>
+      <div class="credit">by: chelricia</div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-panel">
+      <h2>RESULT</h2>
+
+      <p class="result-score">
+        SCORE<br>
+        <span id="finalScore">0</span>
+      </p>
+
+      <div class="result-buttons">
+        <button id="retryBtn2">RETRY</button>
+        <button onclick="goForm()">GO FORM</button>
+      </div>
+    </div>
+  </div>
+  
+</body>
+
+</html>
