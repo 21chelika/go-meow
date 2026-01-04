@@ -15,6 +15,9 @@ const GRID_COL = MAX_RADIUS * 2.2; // 🔑 jarak antar item (ANTI NUMPUK)
 const merging = new Set();
 const FLOOR_HEIGHT = 12;
 const FLOOR_OFFSET = MAX_RADIUS * SIZE_SCALE; // ⬅️ INI KUNCI
+const GAME_OVER_DELAY = 1500; // 1.5 detik
+const dangerTimers = new Map();
+
 
 const floor = Bodies.rectangle(
   canvas.width / 2,
@@ -211,6 +214,36 @@ document.addEventListener("click", () => {
 // =================== RUN ===================
 Engine.run(engine);
 Render.run(render);
+
+Events.on(engine, "afterUpdate", () => {
+  if (isGameOver) return;
+
+  for (const body of world.bodies) {
+    if (!body.circleRadius) continue;
+    if (body.isStatic) continue;
+    if (body === currentBody) continue; // ⬅️ PENTING
+
+    const topOfBall = body.position.y - body.circleRadius;
+
+    // 🚨 MASUK ZONA BAHAYA
+    if (topOfBall <= dropLineY) {
+      if (!dangerTimers.has(body.id)) {
+        dangerTimers.set(body.id, Date.now());
+      } else {
+        const elapsed = Date.now() - dangerTimers.get(body.id);
+        if (elapsed >= GAME_OVER_DELAY) {
+          endGame();
+          break;
+        }
+      }
+    } 
+    // ✅ BALIK AMAN
+    else {
+      dangerTimers.delete(body.id);
+    }
+  }
+});
+
 
 const gameOverY = dropLineY - 100;
 let isGameOver = false;
